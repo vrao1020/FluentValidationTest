@@ -1,7 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using FluentValidation.AspNetCore;
+using FluentValidationPropertyTest.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -30,8 +28,21 @@ namespace FluentValidationPropertyTest
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddScoped<IFileValidate, FileValidate>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc()
+                .AddFluentValidation(fv =>
+                {
+                    //add fluent validation
+                    fv.RunDefaultMvcValidationAfterFluentValidationExecutes = true;
+                    fv.RegisterValidatorsFromAssemblyContaining<Startup>();
+
+                    //below call is required to validate model state of actions that take in 
+                    //IEnumerable of the models/dtos that need to be validated
+                    //if not added, IEnumerable models/dtos will not be validated
+                    fv.ImplicitlyValidateChildProperties = true;
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

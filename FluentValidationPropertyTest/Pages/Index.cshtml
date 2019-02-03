@@ -4,7 +4,21 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<form method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="ObjA.Title"></label>
+        <input asp-for="ObjA.Title" class="form-control" />
+        <span asp-validation-for="ObjA.Title" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ObjA.Message"></label>
+        <textarea asp-for="ObjA.Message" class="form-control"></textarea>
+        <span asp-validation-for="ObjA.Message" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ObjB.FileToUpload"></label><br />
+        <input asp-for="ObjB.FileToUpload" type="file" accept=".png,.jpg,.bmp" /><br />
+        <span asp-validation-for="ObjB.FileToUpload" class="text-danger"></span>
+    </div>
+    <input type="submit" value="Submit"/>
+</form>
